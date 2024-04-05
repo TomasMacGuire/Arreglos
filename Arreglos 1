@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "pila.h"
+#include <conio.h>
+
+#define ESC 27
+
+int ingresaValoresArreglo(int a[], int dimension);
+int nuevoValorArreglo(int a[], int dimension, int *validos);
+void mostrarArreglo(int a[], int validos);
+int sumaArreglo(int a[],int validos);
+
+
+int main()
+{
+    int array[15];
+    int validos= 0;
+    int cantidad= 0;
+
+    validos = ingresaValoresArreglo(array, 15);
+
+    printf("\nLa cantidad de numeros ingresados es de %d\n", validos);
+
+    validos = nuevoValorArreglo(array, 15, &validos);
+
+    printf("\nLa nueva cantidad de arreglos es de: %d", validos);
+
+    mostrarArreglo(array, validos);
+
+    printf("\nLa suma de los numeros cargados en el arreglo es de: %d", sumaArreglo(array,validos));
+
+    return 0;
+}
+
+int ingresaValoresArreglo(int a[], int dimension){
+    char control;
+    int validos = 0;
+
+    while(control != 27 && validos<dimension){
+
+        printf("Ingrese un numero entero para ingresar al arreglo;\n");
+        fflush(stdin);
+        scanf("%d", &a[validos]);
+        validos++;
+
+        printf("Desea continuar ingresando datos? Cualquier tecla para seguir, ESC para salir\n");
+        fflush(stdin);
+        control = getch();
+    }
+
+    return validos;
+}
+int nuevoValorArreglo(int a[], int dimension, int *validos){
+    char control;
+
+    printf("VALOR AL QUE APUNTA VALIDOS: %d", *validos);
+    while( control != 27 && *validos<dimension){
+
+        printf("\nIngrese un nuevo valor a agregar al arreglo\n");
+        scanf("%d", &a[*validos]);
+        (*validos)++;
+
+        printf("Desea continuar ingresando datos? Cualquier tecla para seguir, ESC para salir\n");
+        fflush(stdin);
+        control = getch();
+    }
+
+    return *validos;
+}
+
+void mostrarArreglo(int a[], int validos){
+
+    int i=0;
+
+    printf("\nCONTENIDO DEL ARREGLO\n");
+    while(i<validos){
+        printf("|%d|", a[i]);
+        i++;
+    }
+
+}
+
+int sumaArreglo(int a[],int validos){
+    int i=0;
+    int suma=0;
+    while(i<validos){
+        suma=suma+a[i];
+        i++;
+    }
+    return suma;
+}
