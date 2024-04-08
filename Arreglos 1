@@ -1,92 +1,132 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "pila.h"
 #include <conio.h>
+#include "pila.h"
 
+
+#define DIM 100
 #define ESC 27
 
-int ingresaValoresArreglo(int a[], int dimension);
-int nuevoValorArreglo(int a[], int dimension, int *validos);
-void mostrarArreglo(int a[], int validos);
-int sumaArreglo(int a[],int validos);
+int cargaArregloUsuario(int a[], int dim, int *val);
+void muestraArreglo (int a[], int val);
+int sumaArreglo(int a[], int val);
+void pasaArregloPila(int a[], int val, Pila *p);
+int cargaArregloRandom(int a[],int dim, int cant);
+int buscaDato(int a[],int val, int dato);
 
-
-int main()
-{
+int main(){
+    srand(time(NULL));
     int array[15];
     int validos= 0;
-    int cantidad= 0;
+    int dato;
+    Pila pilita;
+    inicpila(&pilita);
 
-    validos = ingresaValoresArreglo(array, 15);
+    validos = cargaArregloRandom(array,15,15);
+    printf("Los validos son %d\n", validos);
+    muestraArreglo(array,validos);
 
-    printf("\nLa cantidad de numeros ingresados es de %d\n", validos);
+    printf("\nIngrese un numero para buscar en el arreglo\n");
+    scanf("%d",&dato);
+    printf("\nDATO = %d", dato);
 
-    validos = nuevoValorArreglo(array, 15, &validos);
+    printf("\n1 si el numero se encuentra en el arreglo // 0 si no:\n%d\n",buscaDato(array,validos,dato));
 
-    printf("\nLa nueva cantidad de arreglos es de: %d", validos);
+//    validos = cargaArregloUsuario(array, 15, &validos);
+//
+//    printf("Los validos son %d\n", validos);
+//
+//    validos = cargaArregloUsuario(array, 15, &validos);
+//
+//    muestraArreglo(array, validos);
+//
+//    printf("\nLa suma de los datos en el arreglo es de %d", sumaArreglo(array,validos));
+//
+//    printf("\nPILA ANTES DEL ARREGLO");
+//    mostrar(&pilita);
+//
+//    pasaArregloPila(array,validos, &pilita);
+//
+//    printf("\nPILA DESPUES DEL ARREGLO");
+//    mostrar(&pilita);
 
-    mostrarArreglo(array, validos);
-
-    printf("\nLa suma de los numeros cargados en el arreglo es de: %d", sumaArreglo(array,validos));
 
     return 0;
+
 }
 
-int ingresaValoresArreglo(int a[], int dimension){
+
+int cargaArregloUsuario(int a[],int dim,int *val){
     char control;
-    int validos = 0;
 
-    while(control != 27 && validos<dimension){
+    while(control != ESC && *val<=dim){
+        printf("Ingrese un numero para cargar en el arreglo:\n");
+        scanf("%d", &a[*val]);
+        (*val)++;
 
-        printf("Ingrese un numero entero para ingresar al arreglo;\n");
-        fflush(stdin);
-        scanf("%d", &a[validos]);
-        validos++;
-
-        printf("Desea continuar ingresando datos? Cualquier tecla para seguir, ESC para salir\n");
-        fflush(stdin);
+        printf("Presione cualquier tecla para continuar agregando datos / ESC PARA SALIR\n");
         control = getch();
     }
 
-    return validos;
-}
-int nuevoValorArreglo(int a[], int dimension, int *validos){
-    char control;
+    printf("El arreglo cuenta con %d numeros\n", *val);
 
-    printf("VALOR AL QUE APUNTA VALIDOS: %d", *validos);
-    while( control != 27 && *validos<dimension){
-
-        printf("\nIngrese un nuevo valor a agregar al arreglo\n");
-        scanf("%d", &a[*validos]);
-        (*validos)++;
-
-        printf("Desea continuar ingresando datos? Cualquier tecla para seguir, ESC para salir\n");
-        fflush(stdin);
-        control = getch();
-    }
-
-    return *validos;
+    return (*val);
 }
 
-void mostrarArreglo(int a[], int validos){
-
+void muestraArreglo(int a[], int val){
     int i=0;
-
-    printf("\nCONTENIDO DEL ARREGLO\n");
-    while(i<validos){
-        printf("|%d|", a[i]);
+    while(i<val){
+        printf(" %d |", a[i]);
         i++;
     }
-
 }
 
-int sumaArreglo(int a[],int validos){
-    int i=0;
+int sumaArreglo(int a[], int val){
     int suma=0;
-    while(i<validos){
+    for(int i=0; i<val; i++){
         suma=suma+a[i];
-        i++;
     }
+
     return suma;
 }
+
+void pasaArregloPila(int a[], int val, Pila *p){
+    int i=0;
+    while(i<val){
+        apilar(p, a[i]);
+        i++;
+        }
+    mostrar(p);
+}
+
+int cargaArregloRandom(int a[],int dim, int cant){
+
+    int i=0;
+    if(cant<=dim){
+        for(i=0; i<cant; i++){
+
+        a[i]= rand()%100;
+
+        }
+    }else{
+        printf("No es posible cargar mas numeros que el limite del arreglo ...");
+    }
+
+    return i;
+}
+int buscaDato(int a[],int val, int dato){
+    int flag=0;
+    int i=0;
+    while(i<val && flag!=1){
+        if(a[i]==dato){
+            flag=1;
+        }else{
+            flag=0;
+        }
+        i++;
+    }
+
+    return flag;
+}
+
