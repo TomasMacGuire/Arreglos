@@ -130,3 +130,119 @@ int buscaDato(int a[],int val, int dato){
     return flag;
 }
 
+//////////////////
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <time.h>
+#include "pila.h"
+
+int cargaPilaUsuario(Pila *p, int val);
+int cargaPilaRandom(Pila *p, int val, int cant);
+int cargaArregloUsuario(int a[],int *val);
+void muestraArreglo(int a[],int val);
+int sumaArreglo(int a[], int val);
+
+int main()
+{
+    Pila nota;
+    inicpila(&nota);
+    int validos=0;
+    int array[50];
+    int valArray=0;
+
+//    validos= cargaPilaUsuario(&nota, validos);
+    validos= cargaPilaRandom(&nota,validos,10);
+
+    mostrar(&nota);
+
+    printf("VALIDOS:\t%d\n", validos);
+
+    valArray=cargaArregloUsuario(array,valArray);
+
+    printf("VALIDOS ARREGLO:\t%d\n", valArray);
+
+    muestraArreglo(array,valArray);
+
+    printf("\nLa suma del arreglo es de:\t%d\n", sumaArreglo(array,valArray));
+
+    return 0;
+}
+
+///EJERCICIO 1
+int cargaPilaUsuario(Pila *p, int val){
+    char opcion=0;
+    int carga;
+    while(opcion!=27 && val<50){
+        printf("Ingrese una nota:\t");
+        scanf("%d", &carga);
+
+        if(carga<11 && carga>0){
+            apilar(p, carga);
+            val++;
+        }else{
+            printf("\nLa nota ingresada no es valida...\n");
+        }
+        printf("\nESC PARA SALIR // CUALQUIER TECLA PARA CONTINUAR\n");
+
+        fflush(stdin);
+        opcion=getch();
+
+    }
+    return val;
+}
+
+///EJERCICIO 2
+int cargaPilaRandom(Pila *p, int val, int cant){
+    if(cant<=50 && val<50){
+        for(int i=0; i<cant; i++){
+            apilar(p, rand()%10+1);
+            val++;
+        }
+    }else{
+        printf("LA CANTIDAD INGRESADA ES SUPERIOR A LA PERMITIDA");
+    }
+    return val;
+}
+
+///EJERCICIO 3
+int cargaArregloUsuario(int a[],int *val){
+    char opcion=0;
+    int i=val;
+    int carga;
+    while(opcion!=27){
+        printf("Ingrese una nota:\t");
+        scanf("%d", &carga);
+        if(carga<11 && carga>0){
+            a[i]=carga;
+            i++;
+        }else{
+            printf("\nLa nota ingresada no es valida...\n");
+        }
+        printf("\nESC PARA SALIR    // CUALQUIER TECLA PARA CONTINUAR\n");
+
+        fflush(stdin);
+        opcion=getch();
+    }
+    return i;
+}
+void muestraArreglo(int a[],int val){
+    int i=0;
+    while(i<val){
+        if(i%10==0){
+            printf("\n\n\n");
+        }
+            printf("%d\t|", a[i]);
+            i++;
+    }
+
+}
+
+int sumaArreglo(int a[], int val){
+    int suma=0;
+    for(int i=0; i<val;i++){
+        suma= suma+a[i];
+    }
+    return suma;
+}
+////////////////////////////
